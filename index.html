@@ -1,74 +1,96 @@
-<!doctype html>
+<!DOCTYPE html>
 
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ProseMirror demo page</title>
-<link rel=stylesheet href="demo.css">
-<link rel=stylesheet href="parent/view/style/prosemirror.css">
-<link rel=stylesheet href="parent/menu/style/menu.css">
-<link rel=stylesheet href="parent/example-setup/style/style.css">
-<link rel=stylesheet href="parent/gapcursor/style/gapcursor.css">
-
+<style>
+  #editor {
+    padding: 100px;
+  }
+  .ProseMirror {
+  }
+  .ProseMirror:focus-within {
+    outline: none;
+  }
+  h1.title {
+    color: #333333;
+  }
+  h1.is-empty::before {
+    content: attr(data-placeholder);
+    float: left;
+    color: #ced4da;
+    pointer-events: none;
+    height: 0;
+  }
+</style>
 <h1>ProseMirror demo page</h1>
 
 <div class="full"></div>
+<div id="editor"></div>
 
-<div id=content style="display: none">
-<h2>Demonstration Text</h2>
+<div id="content" style="display: none">
+  <h1 class="title">aaaa</h1>
 
-<p>A ProseMirror document is based on a schema, which determines the
-kind of elements that may occur in it, and the relation they have to
-each other. This one is based on the basic schema, with lists and
-tables added. It allows the usual <strong>strong</strong>
-and <em>emphasized</em> text, <code>code font</code>,
-and <a href="http://marijnhaverbeke.nl">links</a>. There are also
-images: <img alt="demo picture" src="img.png">.</p>
+  <div image-with-description>
+    <img
+      src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Ftm-image.tianyancha.com%2Ftm%2F2c12801b48127c92f6636ff48150aa9a.jpg&refer=http%3A%2F%2Ftm-image.tianyancha.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1648882726&t=d1758e8dcc9f0795c56384c43a3bfc6c"
+    />
+  </div>
 
-<p>On the block level you can have:</p>
+  <h2>Demonstration Text</h2>
 
-<ol>
-  <li>Ordered lists (such as this one)</li>
-  <li>Bullet lists</li>
-  <li>Blockquotes</li>
-  <li>Code blocks</li>
-  <li>Tables</li>
-  <li>Horizontal rules</li>
-</ol>
+  <p>On the block level you can have:</p>
 
-<p>It isn't hard to define your own custom elements, and include them
-in your schema. These can be opaque 'leaf' nodes, that the user
-manipulates through extra interfaces you provide, or nodes with
-regular editable child nodes.</p>
+  <ol>
+    <li>Ordered lists (such as this one)</li>
+    <li>Bullet lists</li>
+    <li>Blockquotes</li>
+    <li>Code blocks</li>
+    <li>Tables</li>
+    <li>Horizontal rules</li>
+  </ol>
 
-<hr>
+  <p>
+    It isn't hard to define your own custom elements, and include them in your
+    schema. These can be opaque 'leaf' nodes, that the user manipulates through
+    extra interfaces you provide, or nodes with regular editable child nodes.
+  </p>
 
-<h2>The Model</h2>
+  <hr />
 
-<p>Nodes can nest arbitrarily deep. Thus, the document forms a tree,
-not dissimilar to the browser's DOM tree.</p>
+  <h2>The Model</h2>
 
-<p>At the inline level, the model works differently. Each block of
-text is a single node containing a flat series of inline elements.
-These are serialized as a tree structure when outputting HTML.</p>
+  <p>
+    Nodes can nest arbitrarily deep. Thus, the document forms a tree, not
+    dissimilar to the browser's DOM tree.
+  </p>
 
-<p>Positions in the document are represented as a path (an array of
-offsets) through the block tree, and then an offset into the inline
-content of the block. Blocks that have no inline content (such as
-horizontal rules and HTML blocks) can not have the cursor inside of
-them. User-exposed operations on the document preserve the invariant
-that there is always at least a single valid cursor position.</p>
+  <p>
+    At the inline level, the model works differently. Each block of text is a
+    single node containing a flat series of inline elements. These are
+    serialized as a tree structure when outputting HTML.
+  </p>
 
-<hr>
+  <p>
+    Positions in the document are represented as a path (an array of offsets)
+    through the block tree, and then an offset into the inline content of the
+    block. Blocks that have no inline content (such as horizontal rules and HTML
+    blocks) can not have the cursor inside of them. User-exposed operations on
+    the document preserve the invariant that there is always at least a single
+    valid cursor position.
+  </p>
 
-<h2>Examples</h2>
+  <hr />
 
-<blockquote><blockquote><p>We did not see a nested blockquote
-yet.</p></blockquote></blockquote>
+  <h2>Examples</h2>
 
-<pre><code class="lang-markdown">Nor did we see a code block
+  <blockquote>
+    <blockquote><p>We did not see a nested blockquote yet.</p></blockquote>
+  </blockquote>
+
+  <pre><code class="lang-markdown">Nor did we see a code block
 
 Note that the content of a code block can't be styled.</code></pre>
 
-<p>This paragraph has<br>a hard break inside of it.</p>
+  <p>This paragraph has<br />a hard break inside of it.</p>
 </div>
-

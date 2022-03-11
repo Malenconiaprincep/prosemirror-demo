@@ -1,32 +1,61 @@
-import {schema} from "prosemirror-schema-basic"
-import {EditorState} from "prosemirror-state"
-import {EditorView} from "prosemirror-view"
-// (Omitted repeated imports)
-import {undo, redo, history} from "prosemirror-history"
-import {keymap} from "prosemirror-keymap"
-import {baseKeymap} from "prosemirror-commands"
+import { schema } from "prosemirror-schema-basic"
+import { EditorState } from "prosemirror-state"
+import { EditorView } from "prosemirror-view"
+import { exampleSetup } from "prosemirror-example-setup"
+import applyDevTools from 'prosemirror-dev-tools'
+import {
+  defaultSettings,
+  updateImageNode,
+  imagePlugin,
+} from "./packages/prosemirror-image-plugin/src"
 
+import "./packages/prosemirror-image-plugin/src/styles/common.css"
+import "./packages/prosemirror-image-plugin/src/styles/withResize.css"
+import "./packages/prosemirror-image-plugin/src/styles/sideResize.css"
+import { Schema } from "prosemirror-model"
 
+// Update your settings here!
+const imageSettings = { ...defaultSettings }
 
-// let state = EditorState.create({
-//   schema,
-//   plugins: [
-//     history(),
-//     keymap({"Mod-z": undo, "Mod-y": redo}),
-//     keymap(baseKeymap)
-//   ]
-// })
-// let view = new EditorView(document.body, {
-//   state,
-//   dispatchTransaction(transaction: any) {
-//     console.log("Document size went from", transaction.before.content.size,
-//                 "to", transaction.doc.content.size)
-//     let newState = view.state.apply(transaction)
-//     view.updateState(newState)
-//   }
-// })
-
-let content = document.getElementById("content")
-let state = EditorState.create({
-  doc: DOMParser.fromSchema(schema).parse(content)
+const imageSchema = new Schema({
+  nodes: updateImageNode((schema.spec as any).nodes, {
+    ...imageSettings,
+  }),
+  marks: (schema.spec as any).marks,
 })
+
+const initialDoc = {
+  content: [
+    {
+      content: [
+        {
+          text: "Start typing!",
+          type: "text",
+        },
+      ],
+      type: "paragraph",
+    },
+  ],
+  type: "doc",
+}
+
+console.log(schema.nodeFromJSON(initialDoc))
+console.log(imageSchema.nodeFromJSON(initialDoc))
+
+const state = EditorState.create({
+  doc: schema.nodeFromJSON(initialDoc),
+  plugins: [
+    ...exampleSetup({
+      schema: schema,
+      menuBar: false
+    }),
+    imagePlugin(imageSchema, { ...imageSettings }),
+  ],
+})
+
+const view: EditorView = new EditorView(document.getElementById("editor"), {
+  state,
+})
+
+applyDevTools(view)
+
